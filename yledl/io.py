@@ -30,7 +30,7 @@ from .utils import sane_filename
 
 logger = logging.getLogger('yledl')
 
-__cached_ffmpeg_version: Optional[tuple[int, int]] = None
+_cached_ffmpeg_version: Optional[tuple[int, int]] = None
 
 
 def random_elisa_ipv4():
@@ -95,9 +95,9 @@ class IOContext:
 
         Throws FfmpegNotFoundError, if ffmpeg application is not found.
         """
-        global __cached_ffmpeg_version
-        if __cached_ffmpeg_version:
-            return __cached_ffmpeg_version
+        global _cached_ffmpeg_version
+        if _cached_ffmpeg_version:
+            return _cached_ffmpeg_version
 
         ver = 0, 0
         if self.ffmpeg_binary:
@@ -112,7 +112,7 @@ class IOContext:
             except FileNotFoundError:
                 raise FfmpegNotFoundError()
 
-        __cached_ffmpeg_version = ver
+        _cached_ffmpeg_version = ver
         return ver
 
 
