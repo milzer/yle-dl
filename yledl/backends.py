@@ -303,7 +303,12 @@ class DASHHLSBackend(FfmpegBackend):
     def save_stream(self, output_name, clip, io):
         res = super().save_stream(output_name, clip, io)
 
-        if res == RD_SUCCESS and output_name != '-':
+        if (
+            res == RD_SUCCESS
+            and output_name != '-'
+            and io.subtitles != 'none'
+            and not self.live
+        ):
             self._delay_subtitles(output_name, clip, io)
 
         return res
