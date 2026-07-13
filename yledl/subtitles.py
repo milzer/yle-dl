@@ -39,10 +39,13 @@ def delay_substitles_srt(filename: str, delay_ms: int):
     """Delay subtitle lines in an .srt file by delay_ms milliseconds."""
     logger.debug(f'delaying subtitles by {delay_ms} ms')
 
-    with open(filename, encoding='utf-8') as f:
-        content = f.read()
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(delay_substitles_srt_text(content, delay_ms))
+    try:
+        with open(filename, encoding='utf-8') as f:
+            content = f.read()
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(delay_substitles_srt_text(content, delay_ms))
+    except OSError:
+        logger.error('Failed to apply subtitle delay')
 
 
 def delay_substitles_srt_text(text: str, delay_ms: int) -> str:
