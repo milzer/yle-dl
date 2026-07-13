@@ -79,34 +79,46 @@ def delay_subtitles_mkv(
     sub_spec = optional_stream('1:s', ffmpeg_version)
     base, ext = os.path.splitext(filename)
     tmp = base + '.tmp_subdelay' + ext
-    args = [
-        ffmpeg_binary,
-        '-y',
-        '-loglevel',
-        ffmpeg_loglevel(logger.getEffectiveLevel()),
-        '-i',
-        f'file:{filename}',
-        '-itsoffset',
-        str(delay_s),
-        '-i',
-        f'file:{filename}',
-        '-map',
-        '0:v',
-        '-map',
-        '0:a',
-        '-map',
-        sub_spec,
-        '-c',
-        'copy',
-        f'file:{tmp}',
-    ]
-    ret = execute_pipe([args])
-    if ret == 0:
-        os.replace(tmp, filename)
-    else:
-        logger.warning('Failed to apply subtitle delay')
-        if os.path.exists(tmp):
+
+    try:
+        args = [
+            ffmpeg_binary,
+            '-y',
+            '-loglevel',
+            ffmpeg_loglevel(logger.getEffectiveLevel()),
+            '-i',
+            f'file:{filename}',
+            '-itsoffset',
+            str(delay_s),
+            '-i',
+            f'file:{filename}',
+            '-map',
+            '0:v',
+            '-map',
+            '0:a',
+            '-map',
+            sub_spec,
+            '-c',
+            'copy',
+            f'file:{tmp}',
+        ]
+        ret = execute_pipe([args])
+        if ret == 0:
+            try:
+                os.replace(tmp, filename)
+            except OSError:
+                logger.error('Failed to apply subtitle delay. File rename failed.')
+        else:
+            logger.error(
+                f'Failed to apply subtitle delay. The ffmpeg return value was {ret}'
+            )
+    finally:
+        try:
             os.remove(tmp)
+        except FileNotFoundError:
+            pass
+        except OSError as err:
+            logger.error(str(err))
 
 
 def subtitle_url(subtitles: Iterable[Subtitle], sublang: str) -> Optional[str]:
