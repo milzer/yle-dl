@@ -303,12 +303,16 @@ class DASHHLSBackend(FfmpegBackend):
     def save_stream(self, output_name, clip, io):
         res = super().save_stream(output_name, clip, io)
 
+        print(f'has_subttiles: {clip.has_embedded_substitles()}')
+
         if (
             res == RD_SUCCESS
             and output_name != '-'
             and io.subtitles != 'none'
+            and clip.has_embedded_substitles()
             and not self.live
         ):
+            print('*** delay dubtitles!')
             self._delay_subtitles(output_name, clip, io)
 
         return res

@@ -131,6 +131,9 @@ class Clip:
         else:
             return None
 
+    def has_embedded_substitles(self) -> bool:
+        return any(f.media_type == 'subtitle' for f in self.flavors)
+
 
 class FailedClip(Clip):
     def __init__(self, webpage: str, error_message: str, **kwargs):

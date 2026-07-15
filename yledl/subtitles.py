@@ -45,7 +45,7 @@ def delay_substitles_srt(filename: str, delay_ms: int):
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(delay_substitles_srt_text(content, delay_ms))
     except OSError:
-        logger.error('Failed to apply subtitle delay')
+        logger.warning('Failed to apply subtitle delay')
 
 
 def delay_substitles_srt_text(text: str, delay_ms: int) -> str:
@@ -110,9 +110,9 @@ def delay_subtitles_mkv(
             try:
                 os.replace(tmp, filename)
             except OSError:
-                logger.error('Failed to apply subtitle delay. File rename failed.')
+                logger.warning('Failed to apply subtitle delay. File rename failed.')
         else:
-            logger.error(
+            logger.warning(
                 f'Failed to apply subtitle delay. The ffmpeg return value was {ret}'
             )
     finally:
@@ -121,7 +121,7 @@ def delay_subtitles_mkv(
         except FileNotFoundError:
             pass
         except OSError as err:
-            logger.error(str(err))
+            logger.warning(f'Failed to remove {tmp}: {str(err)}')
 
 
 def subtitle_url(subtitles: Iterable[Subtitle], sublang: str) -> Optional[str]:
