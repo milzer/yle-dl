@@ -2,9 +2,10 @@ yle-dl - download videos from Yle servers
 Copyright 2009-2026 Antti Ajanki
 Distributed under the GPL v3 or later
 
-Unreleased
+Version 20260716
 
 - Avoid leaving temporary *.tmp_subdelay.mkv files behind
+- Sort episodes by ID if release date or episode number are not available
 
 Version 20260624
 
