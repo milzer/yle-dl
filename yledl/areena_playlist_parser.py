@@ -341,6 +341,10 @@ class AreenaPlaylistParser:
             if m:
                 return int(m.group(1))
 
+            m = re.match(r'(\d+)\. ', title)
+            if m:
+                return int(m.group(1))
+
         return None
 
     def _tv_release_date(self, data):
