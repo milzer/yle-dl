@@ -1,6 +1,6 @@
 # This file is part of yle-dl.
 #
-# Copyright 2010-2025 Antti Ajanki and others
+# Copyright 2010-2026 Antti Ajanki and others
 #
 # Yle-dl is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 
 from typing import Optional
 from datetime import datetime
-
 from dataclasses import dataclass
 from .streamflavor import StreamFlavor
 from .subtitles import Subtitle
@@ -52,6 +51,7 @@ class EpisodeMetadata:
             self.season_number or 99999,
             self.episode_number or 99999,
             self.release_date or datetime(1970, 1, 1, 0, 0, 0),
+            self.uri,
         )
 
     def with_episode_number(self, ep):
